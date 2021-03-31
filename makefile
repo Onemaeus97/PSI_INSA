@@ -1,5 +1,5 @@
-Monexe: y.tab.c lex.yy.c symbol.c instructions.c
-	gcc y.tab.c lex.yy.c symbol.c instructions.c -o Monexe
+exec: y.tab.c lex.yy.c symbol.c instructions.c
+	gcc y.tab.c lex.yy.c symbol.c instructions.c -o exec
 
 y.tab.c: yacc.y
 	yacc -d yacc.y

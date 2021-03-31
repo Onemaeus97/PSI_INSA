@@ -1,5 +1,7 @@
 %{
 	#include "y.tab.h"
+    #include <string.h>
+    #include <stdio.h>
 %}
 %% 
 
@@ -20,7 +22,26 @@
 [" "|"	"|"\n"]+ ;
 \, return tVIRGULE;
 ; return tPOINT_VIRGULE;
-(\-?[1-9]+)|((\-?[1-9]+)e(\-?[1-9]+))  {yylval.nombre =atoi(yytext);return (tENTIER);}
+(\-?[1-9]+)|((\-?[1-9]+)e(\-?[1-9]+)) {
+    if(strstr(yytext,"e") == NULL ){
+        yylval.nombre =atoi(yytext);
+        return (tENTIER);
+    }
+    else{
+        char * nbr = strtok(yytext, "e");
+        printf("nbr = %s",nbr);
+        int nombre = atoi(nbr);
+        char * exp = strtok(NULL, "");
+        printf("exp = %s",exp);
+        int expo = atoi(exp);
+        for(int i = 0 ; i < expo ; i++ ){ //pb does not rcognise 0 in the end
+            nombre = nombre * 10 ;
+        }
+        char * token = strtok(yytext, "e");
+        yylval.nombre =nombre;
+        return(tENTIER);
+    }
+}
 %%
 
 int yywrap(){

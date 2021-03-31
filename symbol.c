@@ -46,6 +46,7 @@ int pushSymbol(char *name, bool isConstant, bool isInitialised, enum types type)
 int pushTmp()
 {
     Tmp++;
+    //printf("TMP : %d \n",Tmp);
     return Tmp;
 }
 
@@ -53,6 +54,7 @@ int popTmp()
 {
     int ret = Tmp ;
     Tmp -- ;
+    //printf("TMP : %d \n",Tmp);
     return ret;
 }
 

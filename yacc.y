@@ -52,7 +52,7 @@ EntierOuVar : tENTIER
             {
             printf("nombre : %d \n", yyval.nombre);
             pushTmp();
-            asm_add_2(1,Tmp,yyval.nombre); //-1 means no need to use this reg in afc
+            asm_add_2(6,Tmp,yyval.nombre);
             }
             | tVAR_NAME
             {
