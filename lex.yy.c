@@ -371,13 +371,13 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[67] =
     {   0,
-        0,    0,   30,   29,   15,   29,    8,    9,   12,   10,
-       16,   11,   13,   18,   17,   24,   14,   25,    7,    7,
-        7,    7,    7,    7,    7,    7,    2,    3,   15,   28,
-       18,    0,   26,   23,   27,    7,    7,    7,    7,    7,
-        7,    7,    7,    7,    0,   18,    7,    7,    5,    7,
-        7,    7,    7,    7,    7,    1,    7,    7,    7,    4,
-        7,    7,    7,    6,    7,    0
+        0,    0,   30,   29,   25,   29,   18,   19,   22,   20,
+       26,   21,   23,   28,   27,   12,   24,   13,   17,   17,
+       17,   17,   17,   17,   17,   17,    2,    3,   25,   16,
+       28,    0,   14,   11,   15,   17,   17,   17,    7,   17,
+       17,   17,   17,   17,    0,   28,   17,   17,    5,   17,
+       17,   17,   17,   17,    8,    1,   17,   17,   17,    4,
+       17,   17,    9,    6,   10,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -795,63 +795,113 @@ return tPRINTF_VARIABLE;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 14 "lexx_V2.1.lex"
-{yylval.variable = yytext;  return (tVAR_NAME);}
+#line 15 "lexx_V2.1.lex"
+return tIF;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 15 "lexx_V2.1.lex"
-return tPARENTHESE_OUVRANTE;
+#line 16 "lexx_V2.1.lex"
+return tELSE;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 16 "lexx_V2.1.lex"
-return tPARENTHESE_FERMANTE;
+#line 17 "lexx_V2.1.lex"
+return tWHILE;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 17 "lexx_V2.1.lex"
-return tPLUS;
+#line 18 "lexx_V2.1.lex"
+return tRETURN;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 18 "lexx_V2.1.lex"
-return tMOINS;
+#line 19 "lexx_V2.1.lex"
+return tCMP;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 19 "lexx_V2.1.lex"
-return tFOIS;
+#line 20 "lexx_V2.1.lex"
+return tINF;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 20 "lexx_V2.1.lex"
-return tDIVISER;
+#line 21 "lexx_V2.1.lex"
+return tSUP;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 21 "lexx_V2.1.lex"
-return tEGALE;
+#line 22 "lexx_V2.1.lex"
+return tINFEGALE;
 	YY_BREAK
 case 15:
-/* rule 15 can match eol */
 YY_RULE_SETUP
-#line 22 "lexx_V2.1.lex"
-;
+#line 23 "lexx_V2.1.lex"
+return tSUPEGALE;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 23 "lexx_V2.1.lex"
-return tVIRGULE;
+#line 24 "lexx_V2.1.lex"
+return tNOTEGALE;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 24 "lexx_V2.1.lex"
-return tPOINT_VIRGULE;
+#line 26 "lexx_V2.1.lex"
+{yylval.variable = yytext;  return (tVAR_NAME);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 25 "lexx_V2.1.lex"
+#line 27 "lexx_V2.1.lex"
+return tPARENTHESE_OUVRANTE;
+	YY_BREAK
+case 19:
+YY_RULE_SETUP
+#line 28 "lexx_V2.1.lex"
+return tPARENTHESE_FERMANTE;
+	YY_BREAK
+case 20:
+YY_RULE_SETUP
+#line 29 "lexx_V2.1.lex"
+return tPLUS;
+	YY_BREAK
+case 21:
+YY_RULE_SETUP
+#line 30 "lexx_V2.1.lex"
+return tMOINS;
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 31 "lexx_V2.1.lex"
+return tFOIS;
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 32 "lexx_V2.1.lex"
+return tDIVISER;
+	YY_BREAK
+case 24:
+YY_RULE_SETUP
+#line 33 "lexx_V2.1.lex"
+return tEGALE;
+	YY_BREAK
+case 25:
+/* rule 25 can match eol */
+YY_RULE_SETUP
+#line 34 "lexx_V2.1.lex"
+;
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 35 "lexx_V2.1.lex"
+return tVIRGULE;
+	YY_BREAK
+case 27:
+YY_RULE_SETUP
+#line 36 "lexx_V2.1.lex"
+return tPOINT_VIRGULE;
+	YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 37 "lexx_V2.1.lex"
 {
     if(strstr(yytext,"e") == NULL ){
         yylval.nombre =atoi(yytext);
@@ -873,59 +923,9 @@ YY_RULE_SETUP
     }
 }
 	YY_BREAK
-case 19:
-YY_RULE_SETUP
-#line 47 "lexx_V2.1.lex"
-{return (tIF);}
-	YY_BREAK
-case 20:
-YY_RULE_SETUP
-#line 48 "lexx_V2.1.lex"
-{return (tELSE);}
-	YY_BREAK
-case 21:
-YY_RULE_SETUP
-#line 49 "lexx_V2.1.lex"
-{return (tWHILE);}
-	YY_BREAK
-case 22:
-YY_RULE_SETUP
-#line 50 "lexx_V2.1.lex"
-{return (tRETURN);}
-	YY_BREAK
-case 23:
-YY_RULE_SETUP
-#line 51 "lexx_V2.1.lex"
-{return (tCMP);}
-	YY_BREAK
-case 24:
-YY_RULE_SETUP
-#line 52 "lexx_V2.1.lex"
-{return (tINF);}
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
-#line 53 "lexx_V2.1.lex"
-{return (tSUP);}
-	YY_BREAK
-case 26:
-YY_RULE_SETUP
-#line 54 "lexx_V2.1.lex"
-{return (tINFEQUAL);}
-	YY_BREAK
-case 27:
-YY_RULE_SETUP
-#line 55 "lexx_V2.1.lex"
-{return (tSUPEQUAL);}
-	YY_BREAK
-case 28:
-YY_RULE_SETUP
-#line 56 "lexx_V2.1.lex"
-{return (tNOTEQUAL);}
-	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 59 "lexx_V2.1.lex"
+#line 60 "lexx_V2.1.lex"
 ECHO;
 	YY_BREAK
 #line 932 "lex.yy.c"
@@ -1925,7 +1925,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 59 "lexx_V2.1.lex"
+#line 60 "lexx_V2.1.lex"
 
 
 

@@ -11,6 +11,18 @@
 "const" return tCONST;
 "int" return tINT;
 "printf" return tPRINTF_VARIABLE;
+
+"if"        return tIF;
+"else"      return tELSE;
+"while"     return tWHILE;
+"return"    return tRETURN;
+"=="        return tCMP;
+"<"         return tINF;
+">"         return tSUP;
+"<="        return tINFEGALE;
+">="        return tSUPEGALE;
+"!="        return tNOTEGALE;
+
 ([a-z]|[A-Z])([a-z]|[A-Z]|[0-9]|_)*  {yylval.variable = yytext;  return (tVAR_NAME);}
 \( return tPARENTHESE_OUVRANTE;
 \) return tPARENTHESE_FERMANTE;
@@ -43,17 +55,6 @@
     }
 }
 
-
-"if"        {return (tIF);}
-"else"      {return (tELSE);}
-"while"     {return (tWHILE);}
-"return"    {return (tRETURN);}
-"=="        {return (tCMP);}
-"<"         {return (tINF);}
-">"         {return (tSUP);}
-"<="        {return (tINFEQUAL);}
-">="        {return (tSUPEQUAL);}
-"!="        {return (tNOTEQUAL);}
 
 
 %%

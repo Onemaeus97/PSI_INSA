@@ -64,9 +64,9 @@
      tCMP = 280,
      tINF = 281,
      tSUP = 282,
-     tINFEQUAL = 283,
-     tSUPEQUAL = 284,
-     tNOTEQUAL = 285
+     tINFEGALE = 283,
+     tSUPEGALE = 284,
+     tNOTEGALE = 285
    };
 #endif
 /* Tokens.  */
@@ -95,16 +95,16 @@
 #define tCMP 280
 #define tINF 281
 #define tSUP 282
-#define tINFEQUAL 283
-#define tSUPEQUAL 284
-#define tNOTEQUAL 285
+#define tINFEGALE 283
+#define tSUPEGALE 284
+#define tNOTEGALE 285
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 16 "yacc.y"
+#line 23 "yacc.y"
 {
     char * variable;
     int nombre;

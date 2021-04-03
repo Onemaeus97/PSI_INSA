@@ -1,7 +1,7 @@
 %{
 	#include <stdio.h>
 	#include "symbol.h"
-	#include "instructions.h"
+	#include "assembleur.h"
     void yyerror( char*);
 	int yylex();
     char * VAR ; //temporoary var name
@@ -9,6 +9,13 @@
     int entier ;
     int yylineno;
     int compteur_error = 0;
+    int index_label = 0 ;
+    int label[max_instructions];
+    int index_while = 0 ;
+    int label_while[max_instructions];
+    void patch(int from, int to){
+        label[from] = to ;
+    }
 	%}
 
 /* Terminales */
@@ -26,7 +33,7 @@
 %token tPLUS tMOINS tFOIS tDIVISER tEGALE;
 %token tESPACE tVIRGULE tPOINT_VIRGULE ;
 %token tPRINTF_VARIABLE;
-%token tIF tELSE tWHILE tRETURN tCMP tINF tSUP tINFEQUAL tSUPEQUAL tNOTEQUAL;
+%token tIF tELSE tWHILE tRETURN tCMP tINF tSUP tINFEGALE tSUPEGALE tNOTEGALE;
 
 %verbose
 %error-verbose
@@ -36,6 +43,7 @@
 %right tEGALE;
 %left tPLUS tMOINS;
 %left tFOIS tDIVISER;
+%right tELSE;
 
 %%
 
@@ -46,13 +54,12 @@ start :  tINT tMAIN tPARENTHESE_OUVRANTE tPARENTHESE_FERMANTE  Body {printf("mai
 Body : tACCOLADE_OUVRANTE Phrase  tACCOLADE_FERMANTE;
 
 
-
 /* only in calcul so we add it to the tmp */
 EntierOuVar : tENTIER
             {
             printf("nombre : %d \n", yyval.nombre);
             pushTmp();
-            asm_add_2(6,Tmp,yyval.nombre);
+            add_instruction("AFC",Tmp,yyval.nombre,-1);
             }
             | tVAR_NAME
             {
@@ -63,7 +70,7 @@ EntierOuVar : tENTIER
             }
             int index = findSymbol(yylval.variable);
             pushTmp();
-            asm_add_2(5,Tmp,index);
+            add_instruction("COP",Tmp,index,-1);
             }
             ;
 
@@ -76,6 +83,8 @@ Var : tVAR_NAME {
 Phrase : Phrase Phrase
 	| tINT Def_VAR_INT tPOINT_VIRGULE /* declaration INT*/
     | tCONST tINT Def_VAR_CONST_INT tPOINT_VIRGULE /* declaration CONST*/
+    | If_else
+    | While
 	| Var  tEGALE  Calcul tPOINT_VIRGULE /* affectation */
     {
     printf("affectationAvecCalcul \n");
@@ -89,38 +98,40 @@ Phrase : Phrase Phrase
     }
     int index = findSymbol(VAR);
     setInitialised(VAR);
-    asm_add_2(5,index,Tmp);
+    add_instruction("COP",index,Tmp,-1);
     popTmp();
     }
-	| tPRINTF_VARIABLE tPARENTHESE_OUVRANTE tVAR_NAME tPARENTHESE_FERMANTE tPOINT_VIRGULE {printf("printf \n");}
-	|
+	| tPRINTF_VARIABLE tPARENTHESE_OUVRANTE Var tPARENTHESE_FERMANTE tPOINT_VIRGULE
+    {
+        add_instruction("PRI",findSymbol(VAR),-1,-1);
+    }
+    |
     ;
-
 
 
 Calcul : tPARENTHESE_OUVRANTE Calcul tPARENTHESE_FERMANTE
     |Calcul tPLUS Calcul
         {
         printf("plus \n");
-        asm_add_3(1,Tmp-1,Tmp,Tmp-1); //add and put the result in the top of the tmp
+        add_instruction("ADD",Tmp-1,Tmp,Tmp-1); //add and put the result in the top of the tmp
         popTmp() ;
         }
     |Calcul tMOINS Calcul
         {
         printf("moins \n");
-        asm_add_3(3,Tmp-1,Tmp-1,Tmp);
+        add_instruction("SOU",Tmp-1,Tmp-1,Tmp);
         popTmp() ;
         }
     |Calcul tFOIS Calcul
         {
         printf("fois \n");
-        asm_add_3(2,Tmp-1,Tmp-1,Tmp);
+        add_instruction("MUL",Tmp-1,Tmp-1,Tmp);
         popTmp() ;
         }
     |Calcul tDIVISER Calcul
         {
         printf("diviser \n");
-        asm_add_3(4,Tmp-1,Tmp-1,Tmp);
+        add_instruction("DIV",Tmp-1,Tmp-1,Tmp);
         popTmp() ;
         }
     |EntierOuVar
@@ -151,7 +162,7 @@ Def_VAR_INT: Var
                 yyerror("Varaible has already been declared");
             }
             pushSymbol(VAR, false,true, INT);
-            asm_add_2(6,findSymbol(VAR),entier);
+            add_instruction("AFC",findSymbol(VAR),entier,-1);
             free(VAR);
             }
             | Def_VAR_INT tVIRGULE Def_VAR_INT
@@ -177,11 +188,118 @@ Def_VAR_CONST_INT : Var
                         yyerror("Varaible has already been declared");
                     }
                     pushSymbol(VAR, true,true, INT);
-                    asm_add_2(6,findSymbol(VAR),entier);
+                    add_instruction("AFC",findSymbol(VAR),entier,-1);
                     free(VAR);
                     }
                     | Def_VAR_CONST_INT tVIRGULE Def_VAR_CONST_INT
                     ;
+
+
+Condition : Calcul tINF Calcul
+            {
+                printf("tINF \n");
+                add_instruction("INF",Tmp-1, Tmp-1, Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            |Calcul tSUP Calcul
+            {
+                printf("tSUP \n");
+                add_instruction("SUP",Tmp-1, Tmp-1, Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            |Calcul tCMP Calcul
+            {
+                printf("tCMP \n");
+                add_instruction("CMP",Tmp-1, Tmp-1, Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            |Calcul tINFEGALE Calcul
+            {
+                printf("tINFEGLE \n");
+                add_instruction("INF",Tmp+1, Tmp-1, Tmp);
+                add_instruction("CMP",Tmp, Tmp-1, Tmp);
+                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            |Calcul tSUPEGALE Calcul
+            {
+                printf("tSUPEGALE \n");
+                add_instruction("SUP",Tmp+1, Tmp-1, Tmp);
+                add_instruction("CMP",Tmp, Tmp-1, Tmp);
+                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            |Calcul tNOTEGALE Calcul
+            {
+                printf("tNOTEQUAL \n");
+                add_instruction("CMP", Tmp-1, Tmp-1, Tmp);
+                add_instruction("AFC", Tmp, 0, -1);
+                add_instruction("CMP", Tmp-1, Tmp-1,Tmp);
+                popTmp();
+                index_label ++ ;
+                label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
+                add_instruction("JMF",Tmp,-1,-1); //-1 car on ne sait pas
+                popTmp();
+            }
+            ;
+
+If_else:
+     tIF{printf("if statement \n"); } tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body{
+        int line =get_line_asm();
+        patcher( label[index_label], line+2);
+        index_label -- ;
+    } tELSE
+    {
+        printf("else statement \n");
+        index_label ++ ;
+        label[index_label] = get_line_asm();
+        add_instruction("JMP",-1,-1,-1);
+        
+    }
+    Body {
+        int line =get_line_asm();
+        patcher_else(label[index_label], line+1);
+        index_label -- ;
+    };
+
+
+
+While:
+    tWHILE {
+        printf("while statement \n");
+        index_while ++;
+        label_while[index_while] = get_line_asm() ;
+    }
+    tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
+    {
+        int line =get_line_asm();
+        patcher(label[index_label], line+2);
+        add_instruction("JMP",label_while[index_while]+1,-1,-1);
+        index_label -- ;
+        index_while --;
+    }
+;
+
 
 
 %%
@@ -192,8 +310,7 @@ void yyerror( char* str) {
     fprintf(stderr, "ERROR yyparse : %d: %s\n", yylineno, str);
 }
 int main() {
-    asm_init();
     yyparse();
-    asm_run();
+    write_all_instructions();
     return 0;
 }
