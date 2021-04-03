@@ -26,7 +26,7 @@
 %token tPLUS tMOINS tFOIS tDIVISER tEGALE;
 %token tESPACE tVIRGULE tPOINT_VIRGULE ;
 %token tPRINTF_VARIABLE;
-
+%token tIF tELSE tWHILE tRETURN tCMP tINF tSUP tINFEQUAL tSUPEQUAL tNOTEQUAL;
 
 %verbose
 %error-verbose
@@ -75,12 +75,17 @@ Var : tVAR_NAME {
 
 Phrase : Phrase Phrase
 	| tINT Def_VAR_INT tPOINT_VIRGULE /* declaration INT*/
+    | tCONST tINT Def_VAR_CONST_INT tPOINT_VIRGULE /* declaration CONST*/
 	| Var  tEGALE  Calcul tPOINT_VIRGULE /* affectation */
     {
     printf("affectationAvecCalcul \n");
     if(findSymbol(VAR) == -1){
         compteur_error ++ ;
         yyerror("Varaible has not been declared");
+    }
+    else if (isConstant(VAR)){
+        compteur_error ++ ;
+        yyerror("Error : intent to change a constant");
     }
     int index = findSymbol(VAR);
     setInitialised(VAR);
@@ -125,6 +130,7 @@ Entier : tENTIER{
     printf("nombre : %d \n", yyval.nombre);
     entier = yyval.nombre;
 }
+
 /* Plural declarations INT */
 Def_VAR_INT: Var
             {
@@ -150,6 +156,33 @@ Def_VAR_INT: Var
             }
             | Def_VAR_INT tVIRGULE Def_VAR_INT
             ;
+
+/* Plural declarations CONST INT */
+Def_VAR_CONST_INT : Var
+                    {
+                    printf("declarationSimple_CONST  \n");
+                    if(findSymbol(VAR) != -1){
+                        compteur_error ++ ;
+                        yyerror("Varaible has already been declared");
+                    }
+                    pushSymbol(VAR, true,false, INT);
+                    //printSymbolTable();
+                    free(VAR);
+                    }
+                    |Var tEGALE Entier
+                    {
+                    printf("declarationAvecAffectation_CONST \n" );
+                    if(findSymbol(VAR) != -1){
+                        compteur_error ++ ;
+                        yyerror("Varaible has already been declared");
+                    }
+                    pushSymbol(VAR, true,true, INT);
+                    asm_add_2(6,findSymbol(VAR),entier);
+                    free(VAR);
+                    }
+                    | Def_VAR_CONST_INT tVIRGULE Def_VAR_CONST_INT
+                    ;
+
 
 %%
 

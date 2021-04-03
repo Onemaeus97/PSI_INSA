@@ -56,7 +56,17 @@
      tESPACE = 272,
      tVIRGULE = 273,
      tPOINT_VIRGULE = 274,
-     tPRINTF_VARIABLE = 275
+     tPRINTF_VARIABLE = 275,
+     tIF = 276,
+     tELSE = 277,
+     tWHILE = 278,
+     tRETURN = 279,
+     tCMP = 280,
+     tINF = 281,
+     tSUP = 282,
+     tINFEQUAL = 283,
+     tSUPEQUAL = 284,
+     tNOTEQUAL = 285
    };
 #endif
 /* Tokens.  */
@@ -78,6 +88,16 @@
 #define tVIRGULE 273
 #define tPOINT_VIRGULE 274
 #define tPRINTF_VARIABLE 275
+#define tIF 276
+#define tELSE 277
+#define tWHILE 278
+#define tRETURN 279
+#define tCMP 280
+#define tINF 281
+#define tSUP 282
+#define tINFEQUAL 283
+#define tSUPEQUAL 284
+#define tNOTEQUAL 285
 
 
 
@@ -90,7 +110,7 @@ typedef union YYSTYPE
     int nombre;
 }
 /* Line 1529 of yacc.c.  */
-#line 94 "y.tab.h"
+#line 114 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

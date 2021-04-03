@@ -42,6 +42,20 @@
         return(tENTIER);
     }
 }
+
+
+"if"        {return (tIF);}
+"else"      {return (tELSE);}
+"while"     {return (tWHILE);}
+"return"    {return (tRETURN);}
+"=="        {return (tCMP);}
+"<"         {return (tINF);}
+">"         {return (tSUP);}
+"<="        {return (tINFEQUAL);}
+">="        {return (tSUPEQUAL);}
+"!="        {return (tNOTEQUAL);}
+
+
 %%
 
 int yywrap(){
