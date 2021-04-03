@@ -24,7 +24,8 @@ typedef struct instruction {
     int r3;
 } instruction;
 void add_instruction(char *operation,int r1, int r2, int r3 );
-void write_all_instructions();
+void write_all_instructions_for_human();
+void write_all_instructions_for_machine();
 int get_line_asm();
 void patcher();
 void patcher_else();

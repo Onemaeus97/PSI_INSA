@@ -266,7 +266,7 @@ Condition : Calcul tINF Calcul
 If_else:
      tIF{printf("if statement \n"); } tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body{
         int line =get_line_asm();
-        patcher( label[index_label], line+2);
+        patcher( label[index_label], line+1);
         index_label -- ;
     } tELSE
     {
@@ -278,7 +278,7 @@ If_else:
     }
     Body {
         int line =get_line_asm();
-        patcher_else(label[index_label], line+1);
+        patcher_else(label[index_label], line);
         index_label -- ;
     };
 
@@ -293,8 +293,8 @@ While:
     tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
     {
         int line =get_line_asm();
-        patcher(label[index_label], line+2);
-        add_instruction("JMP",label_while[index_while]+1,-1,-1);
+        patcher(label[index_label], line+1);
+        add_instruction("JMP",label_while[index_while],-1,-1);
         index_label -- ;
         index_while --;
     }
@@ -311,6 +311,7 @@ void yyerror( char* str) {
 }
 int main() {
     yyparse();
-    write_all_instructions();
+    write_all_instructions_for_human();
+    write_all_instructions_for_machine();
     return 0;
 }

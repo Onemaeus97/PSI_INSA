@@ -1705,7 +1705,7 @@ yyreduce:
 #line 267 "yacc.y"
     {
         int line =get_line_asm();
-        patcher( label[index_label], line+2);
+        patcher( label[index_label], line+1);
         index_label -- ;
     }
     break;
@@ -1725,7 +1725,7 @@ yyreduce:
 #line 279 "yacc.y"
     {
         int line =get_line_asm();
-        patcher_else(label[index_label], line+1);
+        patcher_else(label[index_label], line);
         index_label -- ;
     }
     break;
@@ -1743,8 +1743,8 @@ yyreduce:
 #line 294 "yacc.y"
     {
         int line =get_line_asm();
-        patcher(label[index_label], line+2);
-        add_instruction("JMP",label_while[index_while]+1,-1,-1);
+        patcher(label[index_label], line+1);
+        add_instruction("JMP",label_while[index_while],-1,-1);
         index_label -- ;
         index_while --;
     }
@@ -1976,7 +1976,8 @@ void yyerror( char* str) {
 }
 int main() {
     yyparse();
-    write_all_instructions();
+    write_all_instructions_for_human();
+    write_all_instructions_for_machine();
     return 0;
 }
 

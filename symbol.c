@@ -4,7 +4,7 @@
 //initialise symbol table
 symbol *symbolTable[TAILLE] ;
 int position = -1;
-int Tmp = 999;
+int Tmp = 200;
 symbol *New_Symbol(char *name, bool isConstant, bool isInitialised, enum types type)
 {
     if (position != -1) //if symbolTable is not empty

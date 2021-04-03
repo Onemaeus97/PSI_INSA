@@ -19,8 +19,8 @@ void add_instruction(char *operation,int r1, int r2, int r3){
 }
 
 
-void write_all_instructions(){
-    FILE * file_asm = fopen("asm.txt","w+");
+void write_all_instructions_for_human(){
+    FILE * file_asm = fopen("asm_human.txt","w+");
     for (int i = 0; i < index_instructions; i++){
         if(strcmp(instructions[i].operation,"AFC") == 0){
             fprintf(file_asm,"%s | @ : %d | %d \n", instructions[i].operation, instructions[i].r1, instructions[i].r2);
@@ -43,7 +43,30 @@ void write_all_instructions(){
     }
     fclose(file_asm);
 }
-
+void write_all_instructions_for_machine(){
+    FILE * file_asm = fopen("asm_machine.txt","w+");
+    for (int i = 0; i < index_instructions; i++){
+        if(strcmp(instructions[i].operation,"AFC") == 0){
+            fprintf(file_asm,"%s %d %d \n", instructions[i].operation, instructions[i].r1, instructions[i].r2);
+        }
+        else if(strcmp(instructions[i].operation,"LOAD") == 0 || strcmp(instructions[i].operation,"STORE") == 0|| strcmp(instructions[i].operation,"COP") == 0){
+            fprintf(file_asm,"%s %d %d \n", instructions[i].operation, instructions[i].r1, instructions[i].r2);
+        }
+        else if(strcmp(instructions[i].operation,"JMF") == 0){
+            fprintf(file_asm,"%s %d %d \n", instructions[i].operation, instructions[i].r1, instructions[i].r2);
+        }
+        else if(strcmp(instructions[i].operation,"JMP") == 0){
+            fprintf(file_asm,"%s %d \n", instructions[i].operation, instructions[i].r1);
+        }
+        else if(strcmp(instructions[i].operation,"PRI") == 0){
+            fprintf(file_asm,"%s %d \n", instructions[i].operation, instructions[i].r1);
+        }
+        else{
+            fprintf(file_asm,"%s %d %d %d\n", instructions[i].operation, instructions[i].r1, instructions[i].r2, instructions[i].r3);
+        }
+    }
+    fclose(file_asm);
+}
 int get_line_asm(){
     return index_instructions;
 }
