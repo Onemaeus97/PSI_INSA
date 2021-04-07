@@ -266,17 +266,17 @@ Condition : Calcul tINF Calcul
 
 If_else:
      tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body{
-    printf("finition if statement , pas surement dans la bonne place\n");
-    int line =get_line_asm();
-    patcher( label[index_label], line);
-    index_label -- ;
+        printf("finition if statement , pas surement dans la bonne place\n"); //afficher à la fin d'accolade if
+        int line =get_line_asm();
+        patcher( label[index_label], line); //patcher la table avec l'index de cette ligne +1, on a un décalage de 1 déjà car get _line compte les lignes à partir de 1
+        index_label -- ; //décrementer index_label, c'est à dire que pour cet index , on a patché, plus rien à inquieter
      }
      
     | tIF  tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE
     {
-        printf("finition if statement with else\n");
+        printf("finition if statement with else\n");  //afficher à la fin d'accolade
         int line =get_line_asm();
-        patcher( label[index_label], line+1);
+        patcher( label[index_label], line+1); //patcher avec une ligne en plus
         index_label -- ;
         printf("else statement \n");
         index_label ++ ;
