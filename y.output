@@ -7,8 +7,8 @@ Terminals which are not used
 State 7 conflicts: 6 shift/reduce
 State 16 conflicts: 7 shift/reduce
 State 27 conflicts: 6 shift/reduce, 7 reduce/reduce
-State 46 conflicts: 1 shift/reduce
-State 58 conflicts: 1 shift/reduce
+State 47 conflicts: 1 shift/reduce
+State 64 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -57,17 +57,15 @@ Grammar
    31          | Calcul tSUPEGALE Calcul
    32          | Calcul tNOTEGALE Calcul
 
-   33 @1: /* empty */
+   33 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
 
-   34 @2: /* empty */
+   34 @1: /* empty */
 
-   35 @3: /* empty */
+   35 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE @1 Body
 
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 Body
+   36 @2: /* empty */
 
-   37 @4: /* empty */
-
-   38 While: tWHILE @4 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
+   37 While: tWHILE @2 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
 
 
 Terminals, with rules where they appear
@@ -77,8 +75,8 @@ error (256)
 tENTIER (258) 3 20
 tVAR_NAME (259) 4 5
 tMAIN (260) 1
-tPARENTHESE_OUVRANTE (261) 1 12 14 36 38
-tPARENTHESE_FERMANTE (262) 1 12 14 36 38
+tPARENTHESE_OUVRANTE (261) 1 12 14 33 35 37
+tPARENTHESE_FERMANTE (262) 1 12 14 33 35 37
 tACCOLADE_OUVRANTE (263) 2
 tACCOLADE_FERMANTE (264) 2
 tCONST (265) 8
@@ -92,9 +90,9 @@ tESPACE (272)
 tVIRGULE (273) 23 26
 tPOINT_VIRGULE (274) 7 8 11 12
 tPRINTF_VARIABLE (275) 12
-tIF (276) 36
-tELSE (277) 36
-tWHILE (278) 38
+tIF (276) 33 35
+tELSE (277) 35
+tWHILE (278) 37
 tRETURN (279)
 tCMP (280) 29
 tINF (281) 27
@@ -111,7 +109,7 @@ $accept (31)
 start (32)
     on left: 1, on right: 0
 Body (33)
-    on left: 2, on right: 1 36 38
+    on left: 2, on right: 1 33 35 37
 EntierOuVar (34)
     on left: 3 4, on right: 19
 Var (35)
@@ -128,19 +126,15 @@ Def_VAR_INT (39)
 Def_VAR_CONST_INT (40)
     on left: 24 25 26, on right: 8 26
 Condition (41)
-    on left: 27 28 29 30 31 32, on right: 36 38
+    on left: 27 28 29 30 31 32, on right: 33 35 37
 If_else (42)
-    on left: 36, on right: 9
+    on left: 33 35, on right: 9
 @1 (43)
-    on left: 33, on right: 36
-@2 (44)
-    on left: 34, on right: 36
-@3 (45)
-    on left: 35, on right: 36
-While (46)
-    on left: 38, on right: 10
-@4 (47)
-    on left: 37, on right: 38
+    on left: 34, on right: 35
+While (44)
+    on left: 37, on right: 10
+@2 (45)
+    on left: 36, on right: 37
 
 
 state 0
@@ -261,20 +255,19 @@ state 12
 
 state 13
 
-   36 If_else: tIF . @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 Body
+   33 If_else: tIF . tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
+   35        | tIF . tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE @1 Body
 
-    $default  reduce using rule 33 (@1)
-
-    @1  go to state 23
+    tPARENTHESE_OUVRANTE  shift, and go to state 23
 
 
 state 14
 
-   38 While: tWHILE . @4 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
+   37 While: tWHILE . @2 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
 
-    $default  reduce using rule 37 (@4)
+    $default  reduce using rule 36 (@2)
 
-    @4  go to state 24
+    @2  go to state 24
 
 
 state 15
@@ -365,28 +358,35 @@ state 22
 
 state 23
 
-   36 If_else: tIF @1 . tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 Body
+   33 If_else: tIF tPARENTHESE_OUVRANTE . Condition tPARENTHESE_FERMANTE Body
+   35        | tIF tPARENTHESE_OUVRANTE . Condition tPARENTHESE_FERMANTE Body tELSE @1 Body
 
-    tPARENTHESE_OUVRANTE  shift, and go to state 34
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 38
+    Condition    go to state 39
 
 
 state 24
 
-   38 While: tWHILE @4 . tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
+   37 While: tWHILE @2 . tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body
 
-    tPARENTHESE_OUVRANTE  shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 40
 
 
 state 25
 
    11 Phrase: Var tEGALE . Calcul tPOINT_VIRGULE
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
-    Calcul       go to state 40
+    EntierOuVar  go to state 37
+    Calcul       go to state 41
 
 
 state 26
@@ -435,7 +435,7 @@ state 28
    24 Def_VAR_CONST_INT: Var .
    25                  | Var . tEGALE Entier
 
-    tEGALE  shift, and go to state 41
+    tEGALE  shift, and go to state 42
 
     $default  reduce using rule 24 (Def_VAR_CONST_INT)
 
@@ -445,17 +445,17 @@ state 29
     8 Phrase: tCONST tINT Def_VAR_CONST_INT . tPOINT_VIRGULE
    26 Def_VAR_CONST_INT: Def_VAR_CONST_INT . tVIRGULE Def_VAR_CONST_INT
 
-    tVIRGULE        shift, and go to state 42
-    tPOINT_VIRGULE  shift, and go to state 43
+    tVIRGULE        shift, and go to state 43
+    tPOINT_VIRGULE  shift, and go to state 44
 
 
 state 30
 
    22 Def_VAR_INT: Var tEGALE . Entier
 
-    tENTIER  shift, and go to state 44
+    tENTIER  shift, and go to state 45
 
-    Entier  go to state 45
+    Entier  go to state 46
 
 
 state 31
@@ -465,7 +465,7 @@ state 31
     tVAR_NAME  shift, and go to state 9
 
     Var          go to state 20
-    Def_VAR_INT  go to state 46
+    Def_VAR_INT  go to state 47
 
 
 state 32
@@ -479,142 +479,43 @@ state 33
 
    12 Phrase: tPRINTF_VARIABLE tPARENTHESE_OUVRANTE Var . tPARENTHESE_FERMANTE tPOINT_VIRGULE
 
-    tPARENTHESE_FERMANTE  shift, and go to state 47
+    tPARENTHESE_FERMANTE  shift, and go to state 48
 
 
 state 34
-
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE . Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 Body
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 48
-    Condition    go to state 49
-
-
-state 35
-
-   38 While: tWHILE @4 tPARENTHESE_OUVRANTE . Condition tPARENTHESE_FERMANTE Body
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 48
-    Condition    go to state 50
-
-
-state 36
 
     3 EntierOuVar: tENTIER .
 
     $default  reduce using rule 3 (EntierOuVar)
 
 
-state 37
+state 35
 
     4 EntierOuVar: tVAR_NAME .
 
     $default  reduce using rule 4 (EntierOuVar)
 
 
-state 38
+state 36
 
    14 Calcul: tPARENTHESE_OUVRANTE . Calcul tPARENTHESE_FERMANTE
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
-    Calcul       go to state 51
+    EntierOuVar  go to state 37
+    Calcul       go to state 49
 
 
-state 39
+state 37
 
    19 Calcul: EntierOuVar .
 
     $default  reduce using rule 19 (Calcul)
 
 
-state 40
-
-   11 Phrase: Var tEGALE Calcul . tPOINT_VIRGULE
-   15 Calcul: Calcul . tPLUS Calcul
-   16       | Calcul . tMOINS Calcul
-   17       | Calcul . tFOIS Calcul
-   18       | Calcul . tDIVISER Calcul
-
-    tPLUS           shift, and go to state 52
-    tMOINS          shift, and go to state 53
-    tFOIS           shift, and go to state 54
-    tDIVISER        shift, and go to state 55
-    tPOINT_VIRGULE  shift, and go to state 56
-
-
-state 41
-
-   25 Def_VAR_CONST_INT: Var tEGALE . Entier
-
-    tENTIER  shift, and go to state 44
-
-    Entier  go to state 57
-
-
-state 42
-
-   26 Def_VAR_CONST_INT: Def_VAR_CONST_INT tVIRGULE . Def_VAR_CONST_INT
-
-    tVAR_NAME  shift, and go to state 9
-
-    Var                go to state 28
-    Def_VAR_CONST_INT  go to state 58
-
-
-state 43
-
-    8 Phrase: tCONST tINT Def_VAR_CONST_INT tPOINT_VIRGULE .
-
-    $default  reduce using rule 8 (Phrase)
-
-
-state 44
-
-   20 Entier: tENTIER .
-
-    $default  reduce using rule 20 (Entier)
-
-
-state 45
-
-   22 Def_VAR_INT: Var tEGALE Entier .
-
-    $default  reduce using rule 22 (Def_VAR_INT)
-
-
-state 46
-
-   23 Def_VAR_INT: Def_VAR_INT . tVIRGULE Def_VAR_INT
-   23            | Def_VAR_INT tVIRGULE Def_VAR_INT .
-
-    tVIRGULE  shift, and go to state 31
-
-    tVIRGULE  [reduce using rule 23 (Def_VAR_INT)]
-    $default  reduce using rule 23 (Def_VAR_INT)
-
-
-state 47
-
-   12 Phrase: tPRINTF_VARIABLE tPARENTHESE_OUVRANTE Var tPARENTHESE_FERMANTE . tPOINT_VIRGULE
-
-    tPOINT_VIRGULE  shift, and go to state 59
-
-
-state 48
+state 38
 
    15 Calcul: Calcul . tPLUS Calcul
    16       | Calcul . tMOINS Calcul
@@ -627,33 +528,113 @@ state 48
    31          | Calcul . tSUPEGALE Calcul
    32          | Calcul . tNOTEGALE Calcul
 
-    tPLUS      shift, and go to state 52
-    tMOINS     shift, and go to state 53
-    tFOIS      shift, and go to state 54
-    tDIVISER   shift, and go to state 55
-    tCMP       shift, and go to state 60
-    tINF       shift, and go to state 61
-    tSUP       shift, and go to state 62
-    tINFEGALE  shift, and go to state 63
-    tSUPEGALE  shift, and go to state 64
-    tNOTEGALE  shift, and go to state 65
+    tPLUS      shift, and go to state 50
+    tMOINS     shift, and go to state 51
+    tFOIS      shift, and go to state 52
+    tDIVISER   shift, and go to state 53
+    tCMP       shift, and go to state 54
+    tINF       shift, and go to state 55
+    tSUP       shift, and go to state 56
+    tINFEGALE  shift, and go to state 57
+    tSUPEGALE  shift, and go to state 58
+    tNOTEGALE  shift, and go to state 59
+
+
+state 39
+
+   33 If_else: tIF tPARENTHESE_OUVRANTE Condition . tPARENTHESE_FERMANTE Body
+   35        | tIF tPARENTHESE_OUVRANTE Condition . tPARENTHESE_FERMANTE Body tELSE @1 Body
+
+    tPARENTHESE_FERMANTE  shift, and go to state 60
+
+
+state 40
+
+   37 While: tWHILE @2 tPARENTHESE_OUVRANTE . Condition tPARENTHESE_FERMANTE Body
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 38
+    Condition    go to state 61
+
+
+state 41
+
+   11 Phrase: Var tEGALE Calcul . tPOINT_VIRGULE
+   15 Calcul: Calcul . tPLUS Calcul
+   16       | Calcul . tMOINS Calcul
+   17       | Calcul . tFOIS Calcul
+   18       | Calcul . tDIVISER Calcul
+
+    tPLUS           shift, and go to state 50
+    tMOINS          shift, and go to state 51
+    tFOIS           shift, and go to state 52
+    tDIVISER        shift, and go to state 53
+    tPOINT_VIRGULE  shift, and go to state 62
+
+
+state 42
+
+   25 Def_VAR_CONST_INT: Var tEGALE . Entier
+
+    tENTIER  shift, and go to state 45
+
+    Entier  go to state 63
+
+
+state 43
+
+   26 Def_VAR_CONST_INT: Def_VAR_CONST_INT tVIRGULE . Def_VAR_CONST_INT
+
+    tVAR_NAME  shift, and go to state 9
+
+    Var                go to state 28
+    Def_VAR_CONST_INT  go to state 64
+
+
+state 44
+
+    8 Phrase: tCONST tINT Def_VAR_CONST_INT tPOINT_VIRGULE .
+
+    $default  reduce using rule 8 (Phrase)
+
+
+state 45
+
+   20 Entier: tENTIER .
+
+    $default  reduce using rule 20 (Entier)
+
+
+state 46
+
+   22 Def_VAR_INT: Var tEGALE Entier .
+
+    $default  reduce using rule 22 (Def_VAR_INT)
+
+
+state 47
+
+   23 Def_VAR_INT: Def_VAR_INT . tVIRGULE Def_VAR_INT
+   23            | Def_VAR_INT tVIRGULE Def_VAR_INT .
+
+    tVIRGULE  shift, and go to state 31
+
+    tVIRGULE  [reduce using rule 23 (Def_VAR_INT)]
+    $default  reduce using rule 23 (Def_VAR_INT)
+
+
+state 48
+
+   12 Phrase: tPRINTF_VARIABLE tPARENTHESE_OUVRANTE Var tPARENTHESE_FERMANTE . tPOINT_VIRGULE
+
+    tPOINT_VIRGULE  shift, and go to state 65
 
 
 state 49
-
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition . tPARENTHESE_FERMANTE Body @2 tELSE @3 Body
-
-    tPARENTHESE_FERMANTE  shift, and go to state 66
-
-
-state 50
-
-   38 While: tWHILE @4 tPARENTHESE_OUVRANTE Condition . tPARENTHESE_FERMANTE Body
-
-    tPARENTHESE_FERMANTE  shift, and go to state 67
-
-
-state 51
 
    14 Calcul: tPARENTHESE_OUVRANTE Calcul . tPARENTHESE_FERMANTE
    15       | Calcul . tPLUS Calcul
@@ -661,191 +642,190 @@ state 51
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
 
-    tPARENTHESE_FERMANTE  shift, and go to state 68
-    tPLUS                 shift, and go to state 52
-    tMOINS                shift, and go to state 53
-    tFOIS                 shift, and go to state 54
-    tDIVISER              shift, and go to state 55
+    tPARENTHESE_FERMANTE  shift, and go to state 66
+    tPLUS                 shift, and go to state 50
+    tMOINS                shift, and go to state 51
+    tFOIS                 shift, and go to state 52
+    tDIVISER              shift, and go to state 53
+
+
+state 50
+
+   15 Calcul: Calcul tPLUS . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 67
+
+
+state 51
+
+   16 Calcul: Calcul tMOINS . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 68
 
 
 state 52
 
-   15 Calcul: Calcul tPLUS . Calcul
+   17 Calcul: Calcul tFOIS . Calcul
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
+    EntierOuVar  go to state 37
     Calcul       go to state 69
 
 
 state 53
 
-   16 Calcul: Calcul tMOINS . Calcul
+   18 Calcul: Calcul tDIVISER . Calcul
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
+    EntierOuVar  go to state 37
     Calcul       go to state 70
 
 
 state 54
 
-   17 Calcul: Calcul tFOIS . Calcul
+   29 Condition: Calcul tCMP . Calcul
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
+    EntierOuVar  go to state 37
     Calcul       go to state 71
 
 
 state 55
 
-   18 Calcul: Calcul tDIVISER . Calcul
+   27 Condition: Calcul tINF . Calcul
 
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
 
-    EntierOuVar  go to state 39
+    EntierOuVar  go to state 37
     Calcul       go to state 72
 
 
 state 56
+
+   28 Condition: Calcul tSUP . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 73
+
+
+state 57
+
+   30 Condition: Calcul tINFEGALE . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 74
+
+
+state 58
+
+   31 Condition: Calcul tSUPEGALE . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 75
+
+
+state 59
+
+   32 Condition: Calcul tNOTEGALE . Calcul
+
+    tENTIER               shift, and go to state 34
+    tVAR_NAME             shift, and go to state 35
+    tPARENTHESE_OUVRANTE  shift, and go to state 36
+
+    EntierOuVar  go to state 37
+    Calcul       go to state 76
+
+
+state 60
+
+   33 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE . Body
+   35        | tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE . Body tELSE @1 Body
+
+    tACCOLADE_OUVRANTE  shift, and go to state 7
+
+    Body  go to state 77
+
+
+state 61
+
+   37 While: tWHILE @2 tPARENTHESE_OUVRANTE Condition . tPARENTHESE_FERMANTE Body
+
+    tPARENTHESE_FERMANTE  shift, and go to state 78
+
+
+state 62
 
    11 Phrase: Var tEGALE Calcul tPOINT_VIRGULE .
 
     $default  reduce using rule 11 (Phrase)
 
 
-state 57
+state 63
 
    25 Def_VAR_CONST_INT: Var tEGALE Entier .
 
     $default  reduce using rule 25 (Def_VAR_CONST_INT)
 
 
-state 58
+state 64
 
    26 Def_VAR_CONST_INT: Def_VAR_CONST_INT . tVIRGULE Def_VAR_CONST_INT
    26                  | Def_VAR_CONST_INT tVIRGULE Def_VAR_CONST_INT .
 
-    tVIRGULE  shift, and go to state 42
+    tVIRGULE  shift, and go to state 43
 
     tVIRGULE  [reduce using rule 26 (Def_VAR_CONST_INT)]
     $default  reduce using rule 26 (Def_VAR_CONST_INT)
 
 
-state 59
+state 65
 
    12 Phrase: tPRINTF_VARIABLE tPARENTHESE_OUVRANTE Var tPARENTHESE_FERMANTE tPOINT_VIRGULE .
 
     $default  reduce using rule 12 (Phrase)
 
 
-state 60
-
-   29 Condition: Calcul tCMP . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 73
-
-
-state 61
-
-   27 Condition: Calcul tINF . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 74
-
-
-state 62
-
-   28 Condition: Calcul tSUP . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 75
-
-
-state 63
-
-   30 Condition: Calcul tINFEGALE . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 76
-
-
-state 64
-
-   31 Condition: Calcul tSUPEGALE . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 77
-
-
-state 65
-
-   32 Condition: Calcul tNOTEGALE . Calcul
-
-    tENTIER               shift, and go to state 36
-    tVAR_NAME             shift, and go to state 37
-    tPARENTHESE_OUVRANTE  shift, and go to state 38
-
-    EntierOuVar  go to state 39
-    Calcul       go to state 78
-
-
 state 66
-
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE . Body @2 tELSE @3 Body
-
-    tACCOLADE_OUVRANTE  shift, and go to state 7
-
-    Body  go to state 79
-
-
-state 67
-
-   38 While: tWHILE @4 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE . Body
-
-    tACCOLADE_OUVRANTE  shift, and go to state 7
-
-    Body  go to state 80
-
-
-state 68
 
    14 Calcul: tPARENTHESE_OUVRANTE Calcul tPARENTHESE_FERMANTE .
 
     $default  reduce using rule 14 (Calcul)
 
 
-state 69
+state 67
 
    15 Calcul: Calcul . tPLUS Calcul
    15       | Calcul tPLUS Calcul .
@@ -853,13 +833,13 @@ state 69
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
 
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
     $default  reduce using rule 15 (Calcul)
 
 
-state 70
+state 68
 
    15 Calcul: Calcul . tPLUS Calcul
    16       | Calcul . tMOINS Calcul
@@ -867,13 +847,13 @@ state 70
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
 
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
     $default  reduce using rule 16 (Calcul)
 
 
-state 71
+state 69
 
    15 Calcul: Calcul . tPLUS Calcul
    16       | Calcul . tMOINS Calcul
@@ -884,7 +864,7 @@ state 71
     $default  reduce using rule 17 (Calcul)
 
 
-state 72
+state 70
 
    15 Calcul: Calcul . tPLUS Calcul
    16       | Calcul . tMOINS Calcul
@@ -895,7 +875,7 @@ state 72
     $default  reduce using rule 18 (Calcul)
 
 
-state 73
+state 71
 
    15 Calcul: Calcul . tPLUS Calcul
    16       | Calcul . tMOINS Calcul
@@ -903,12 +883,44 @@ state 73
    18       | Calcul . tDIVISER Calcul
    29 Condition: Calcul tCMP Calcul .
 
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
     $default  reduce using rule 29 (Condition)
+
+
+state 72
+
+   15 Calcul: Calcul . tPLUS Calcul
+   16       | Calcul . tMOINS Calcul
+   17       | Calcul . tFOIS Calcul
+   18       | Calcul . tDIVISER Calcul
+   27 Condition: Calcul tINF Calcul .
+
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
+
+    $default  reduce using rule 27 (Condition)
+
+
+state 73
+
+   15 Calcul: Calcul . tPLUS Calcul
+   16       | Calcul . tMOINS Calcul
+   17       | Calcul . tFOIS Calcul
+   18       | Calcul . tDIVISER Calcul
+   28 Condition: Calcul tSUP Calcul .
+
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
+
+    $default  reduce using rule 28 (Condition)
 
 
 state 74
@@ -917,14 +929,14 @@ state 74
    16       | Calcul . tMOINS Calcul
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
-   27 Condition: Calcul tINF Calcul .
+   30 Condition: Calcul tINFEGALE Calcul .
 
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
-    $default  reduce using rule 27 (Condition)
+    $default  reduce using rule 30 (Condition)
 
 
 state 75
@@ -933,14 +945,14 @@ state 75
    16       | Calcul . tMOINS Calcul
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
-   28 Condition: Calcul tSUP Calcul .
+   31 Condition: Calcul tSUPEGALE Calcul .
 
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
-    $default  reduce using rule 28 (Condition)
+    $default  reduce using rule 31 (Condition)
 
 
 state 76
@@ -949,91 +961,62 @@ state 76
    16       | Calcul . tMOINS Calcul
    17       | Calcul . tFOIS Calcul
    18       | Calcul . tDIVISER Calcul
-   30 Condition: Calcul tINFEGALE Calcul .
-
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
-
-    $default  reduce using rule 30 (Condition)
-
-
-state 77
-
-   15 Calcul: Calcul . tPLUS Calcul
-   16       | Calcul . tMOINS Calcul
-   17       | Calcul . tFOIS Calcul
-   18       | Calcul . tDIVISER Calcul
-   31 Condition: Calcul tSUPEGALE Calcul .
-
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
-
-    $default  reduce using rule 31 (Condition)
-
-
-state 78
-
-   15 Calcul: Calcul . tPLUS Calcul
-   16       | Calcul . tMOINS Calcul
-   17       | Calcul . tFOIS Calcul
-   18       | Calcul . tDIVISER Calcul
    32 Condition: Calcul tNOTEGALE Calcul .
 
-    tPLUS     shift, and go to state 52
-    tMOINS    shift, and go to state 53
-    tFOIS     shift, and go to state 54
-    tDIVISER  shift, and go to state 55
+    tPLUS     shift, and go to state 50
+    tMOINS    shift, and go to state 51
+    tFOIS     shift, and go to state 52
+    tDIVISER  shift, and go to state 53
 
     $default  reduce using rule 32 (Condition)
 
 
+state 77
+
+   33 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body .
+   35        | tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body . tELSE @1 Body
+
+    tELSE  shift, and go to state 79
+
+    $default  reduce using rule 33 (If_else)
+
+
+state 78
+
+   37 While: tWHILE @2 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE . Body
+
+    tACCOLADE_OUVRANTE  shift, and go to state 7
+
+    Body  go to state 80
+
+
 state 79
 
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body . @2 tELSE @3 Body
+   35 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE . @1 Body
 
-    $default  reduce using rule 34 (@2)
+    $default  reduce using rule 34 (@1)
 
-    @2  go to state 81
+    @1  go to state 81
 
 
 state 80
 
-   38 While: tWHILE @4 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body .
+   37 While: tWHILE @2 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body .
 
-    $default  reduce using rule 38 (While)
+    $default  reduce using rule 37 (While)
 
 
 state 81
 
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 . tELSE @3 Body
+   35 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE @1 . Body
 
-    tELSE  shift, and go to state 82
+    tACCOLADE_OUVRANTE  shift, and go to state 7
+
+    Body  go to state 82
 
 
 state 82
 
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE . @3 Body
+   35 If_else: tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE @1 Body .
 
-    $default  reduce using rule 35 (@3)
-
-    @3  go to state 83
-
-
-state 83
-
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 . Body
-
-    tACCOLADE_OUVRANTE  shift, and go to state 7
-
-    Body  go to state 84
-
-
-state 84
-
-   36 If_else: tIF @1 tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body @2 tELSE @3 Body .
-
-    $default  reduce using rule 36 (If_else)
+    $default  reduce using rule 35 (If_else)

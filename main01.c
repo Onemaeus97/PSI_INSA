@@ -3,9 +3,8 @@ int main(){
     a = 2 ;
     if ( 24 > 3){
         a = 4;
-    }else{
-        printf(a);
-    }    b = 5 ;
+    } 
+    b = 5 ;
     
 }
 

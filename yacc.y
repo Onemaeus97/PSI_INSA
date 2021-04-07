@@ -263,13 +263,21 @@ Condition : Calcul tINF Calcul
             }
             ;
 
+
 If_else:
-     tIF{printf("if statement \n"); } tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body{
+     tIF tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body{
+    printf("finition if statement , pas surement dans la bonne place\n");
+    int line =get_line_asm();
+    patcher( label[index_label], line);
+    index_label -- ;
+     }
+     
+    | tIF  tPARENTHESE_OUVRANTE Condition tPARENTHESE_FERMANTE Body tELSE
+    {
+        printf("finition if statement with else\n");
         int line =get_line_asm();
         patcher( label[index_label], line+1);
         index_label -- ;
-    } tELSE
-    {
         printf("else statement \n");
         index_label ++ ;
         label[index_label] = get_line_asm();
@@ -280,7 +288,9 @@ If_else:
         int line =get_line_asm();
         patcher_else(label[index_label], line);
         index_label -- ;
-    };
+    }
+    ;
+
 
 
 
