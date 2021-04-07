@@ -34,7 +34,7 @@
 [" "|"	"|"\n"]+ ;
 \, return tVIRGULE;
 ; return tPOINT_VIRGULE;
-(\-?[1-9]+)|((\-?[1-9]+)e(\-?[1-9]+)) {
+(\-?[0-9]+)|((\-?[0-9]+)e(\-?[0-9]+)) {
     if(strstr(yytext,"e") == NULL ){
         yylval.nombre =atoi(yytext);
         return (tENTIER);
