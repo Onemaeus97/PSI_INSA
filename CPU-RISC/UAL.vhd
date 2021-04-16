@@ -44,6 +44,12 @@ architecture Behavioral of UAL is
 	signal A_ext:STD_LOGIC_VECTOR (15 downto 0);
 	signal B_ext:STD_LOGIC_VECTOR (15 downto 0);
 	signal S_ext:STD_LOGIC_VECTOR (15 downto 0);
+
+--tester le retard et remplaer eventuelment le process par 
+-- result<=A+b when ctrl_alu="000" else 
+-- A-B when .....
+-- .....
+-- c<='1'when result > ....
 begin
 
 	
