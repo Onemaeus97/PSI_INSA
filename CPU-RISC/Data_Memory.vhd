@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    12:35:08 04/16/2021 
+-- Create Date:    14:19:49 04/16/2021 
 -- Design Name: 
--- Module Name:    Register_bank - Behavioral 
+-- Module Name:    Data_Memory - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -24,40 +24,27 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
-use IEEE.NUMERIC_STD.ALL;
+--use IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Register_bank is
-    Port ( A_adr : in  STD_LOGIC_VECTOR(3 downto 0);
-           B_adr : in  STD_LOGIC_VECTOR (3 downto 0);
-           W_adr : in  STD_LOGIC_VECTOR (3 downto 0);
-           W : in  STD_LOGIC;
-           DATA : in  STD_LOGIC_VECTOR (7 downto 0);
+entity Data_Memory is
+    Port ( adr : in  STD_LOGIC_VECTOR (7 downto 0);
+           IN_port : in  STD_LOGIC_VECTOR (7 downto 0);
+			  OUT_port : out  STD_LOGIC_VECTOR(31 downto 0);
+           RW : in  STD_LOGIC;
            RST : in  STD_LOGIC;
-           CLK : in  STD_LOGIC;
-           QA : out  STD_LOGIC_VECTOR (7 downto 0);
-           QB : out  STD_LOGIC_VECTOR (7 downto 0));
-			  
-			  
-			  
-			  
-end Register_bank;
+           CLK : in  STD_LOGIC);
+end Data_Memory;
 
-architecture Behavioral of Register_bank is
-
-type banc_reg is array(0 to 15) of STD_LOGIC_VECTOR(7 downto 0);
-signal reg : banc_reg;
-
-
+architecture Behavioral of Data_Memory is
+type banc_mem is array(0 to 255) of STD_LOGIC_VECTOR(7 downto 0);
+signal mem : banc_mem;
 begin
 
-
-QA<= reg(conv_integer(A_adr)) ;
-QB<= reg(conv_integer(B_adr)) ;
 
 
 
@@ -65,8 +52,18 @@ P : process
 	begin 
 		wait until CLK'event and CLK='1';
 	 
-		if RST='0' then reg<= (others => "00000000"); end if;
-		if W='1' then reg(conv_integer(W_adr)) <= DATA; end if;
+		if RST='0'
+		then
+			mem <= (others =>"00000000");
+		end if;
+		if RW='1'
+		then
+			OUT_port <= mem(conv_integer(adr));
+		elsif RW = '0'
+		then
+			mem(conv_integer(adr)) <= IN_port;
+		end if;
+		
 
 		
 	end process P;

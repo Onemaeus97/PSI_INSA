@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   13:22:11 04/16/2021
+-- Create Date:   14:35:33 04/16/2021
 -- Design Name:   
--- Module Name:   /home/karaoud/Documents/4-ir/sysinfo/compilo3/PSI_INSA/CPU-RISC/Register_bank_TEST.vhd
+-- Module Name:   /home/karaoud/Documents/4-ir/sysinfo/compilo3/PSI_INSA/CPU-RISC/Data_Memory_TEST.vhd
 -- Project Name:  CPU-RISC
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: Register_bank
+-- VHDL Test Bench Created by ISE for module: Data_Memory
 -- 
 -- Dependencies:
 -- 
@@ -32,40 +32,34 @@ USE ieee.std_logic_1164.ALL;
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY Register_bank_TEST IS
-END Register_bank_TEST;
+ENTITY Data_Memory_TEST IS
+END Data_Memory_TEST;
  
-ARCHITECTURE behavior OF Register_bank_TEST IS 
+ARCHITECTURE behavior OF Data_Memory_TEST IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT Register_bank
+    COMPONENT Data_Memory
     PORT(
-         A_adr : IN  std_logic_vector(3 downto 0);
-         B_adr : IN  std_logic_vector(3 downto 0);
-         W_adr : IN  std_logic_vector(3 downto 0);
-         W : IN  std_logic;
-         DATA : IN  std_logic_vector(7 downto 0);
+         adr : IN  std_logic_vector(7 downto 0);
+         IN_port : IN  std_logic_vector(7 downto 0);
+         OUT_port : OUT  std_logic_vector(31 downto 0);
+         RW : IN  std_logic;
          RST : IN  std_logic;
-         CLK : IN  std_logic;
-         QA : OUT  std_logic_vector(7 downto 0);
-         QB : OUT  std_logic_vector(7 downto 0)
+         CLK : IN  std_logic
         );
     END COMPONENT;
     
 
    --Inputs
-   signal A_adr : std_logic_vector(3 downto 0) := (others => '0');
-   signal B_adr : std_logic_vector(3 downto 0) := (others => '0');
-   signal W_adr : std_logic_vector(3 downto 0) := (others => '0');
-   signal W : std_logic := '0';
-   signal DATA : std_logic_vector(7 downto 0) := (others => '0');
+   signal adr : std_logic_vector(7 downto 0) := (others => '0');
+   signal IN_port : std_logic_vector(7 downto 0) := (others => '0');
+   signal RW : std_logic := '0';
    signal RST : std_logic := '0';
    signal CLK : std_logic := '0';
 
  	--Outputs
-   signal QA : std_logic_vector(7 downto 0);
-   signal QB : std_logic_vector(7 downto 0);
+   signal OUT_port : std_logic_vector(31 downto 0);
 
    -- Clock period definitions
    constant CLK_period : time := 10 ns;
@@ -73,16 +67,13 @@ ARCHITECTURE behavior OF Register_bank_TEST IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: Register_bank PORT MAP (
-          A_adr => A_adr,
-          B_adr => B_adr,
-          W_adr => W_adr,
-          W => W,
-          DATA => DATA,
+   uut: Data_Memory PORT MAP (
+          adr => adr,
+          IN_port => IN_port,
+          OUT_port => OUT_port,
+          RW => RW,
           RST => RST,
-          CLK => CLK,
-          QA => QA,
-          QB => QB
+          CLK => CLK
         );
 
    -- Clock process definitions
@@ -103,13 +94,12 @@ BEGIN
 
       wait for CLK_period*10;
 
-
-          A_adr <= "1111";
-          B_adr <="0000";
-          W_adr <="1111" , "0101" after 100 ns;
-          W <='0', '1' after 30 ns ,  '0' after 50 ns , '1' after 100 ns , '0' after 120 ns;
+     
+          adr <= "11100001";
+          IN_port <="11110000", "00001111" after 250 ns;
+          RW <='0', '1' after 250 ns;
           DATA<="11111111", "01010101" after 300 ns;
-          RST <= '1';
+          RST <= '0', '1' after 20 ns;
 	   
 
       wait;
