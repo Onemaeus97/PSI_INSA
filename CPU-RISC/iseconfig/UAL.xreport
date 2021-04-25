@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2021-04-16T14:35:09</DateModified>
+  <DateModified>2021-04-23T13:12:15</DateModified>
   <ModuleName>UAL</ModuleName>
-  <SummaryTimeStamp>2021-04-16T12:35:45</SummaryTimeStamp>
-  <SavedFilePath>/home/karaoud/Documents/4-ir/sysinfo/compilo3/PSI_INSA/CPU-RISC/iseconfig/UAL.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>/home/karaoud/Documents/4-ir/sysinfo/compilo2/PSI_INSA/CPU-RISC/</ImplementationReportsDirectory>
+  <SummaryTimeStamp>2021-04-23T12:46:41</SummaryTimeStamp>
+  <SavedFilePath>/home/parallels/Desktop/PSI_INSA/CPU-RISC/iseconfig/UAL.xreport</SavedFilePath>
+  <ImplementationReportsDirectory>/home/parallels/compilo2/PSI_INSA/CPU-RISC/</ImplementationReportsDirectory>
   <DateInitialized>2021-04-14T10:16:09</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>

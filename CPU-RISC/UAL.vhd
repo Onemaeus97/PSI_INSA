@@ -35,7 +35,7 @@ entity UAL is
     Port ( A : in  STD_LOGIC_VECTOR (7 downto 0);
            B : in  STD_LOGIC_VECTOR (7 downto 0);
            flags : out  STD_LOGIC_VECTOR (3 downto 0);
-           Ctrl_Alu : in  STD_LOGIC_VECTOR (1 downto 0);
+           Ctrl_Alu : in  STD_LOGIC_VECTOR (2 downto 0);
            S : out  STD_LOGIC_VECTOR (7 downto 0));
 end UAL;
 
@@ -60,7 +60,7 @@ begin
 		P: process (A,B,Ctrl_Alu, s_ext)
 		begin
 			flags <= "0000";
-			if Ctrl_Alu = "01" --addition
+			if Ctrl_Alu = "001" --addition
 			then 
 					S_ext <= A_ext + B_ext;
 					sortie <= S_ext (7 downto 0);
@@ -75,7 +75,7 @@ begin
 						end if;
 					end if;
 			end if;
-			if Ctrl_Alu = "11" --soustraction
+			if Ctrl_Alu = "011" --soustraction
 			then 
 				sortie <= A - B;
 				if A = B
@@ -86,7 +86,7 @@ begin
 					flags <= "1000";
 				end if;
 			end if;
-			if Ctrl_Alu = "10" --multiplication
+			if Ctrl_Alu = "010" --multiplication
 			then
 				S_ext <= A * B;
 				sortie <= S_ext (7 downto 0);

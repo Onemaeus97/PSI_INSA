@@ -109,7 +109,7 @@ BEGIN
           W_adr <="1111" , "0101" after 100 ns;
           W <='0', '1' after 30 ns ,  '0' after 50 ns , '1' after 100 ns , '0' after 120 ns;
           DATA<="11111111", "01010101" after 300 ns;
-          RST <= '1';
+          RST <= '1' , '0' after 150 ns;
 	   
 
       wait;
