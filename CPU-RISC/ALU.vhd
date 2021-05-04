@@ -46,13 +46,16 @@ architecture Behavioral of ALU is
 	signal result :STD_LOGIC_VECTOR (15 downto 0);
 	signal A_ext:STD_LOGIC_VECTOR (15 downto 0);
 	signal B_ext:STD_LOGIC_VECTOR (15 downto 0);
+	signal mux_out : STD_LOGIC_VECTOR (15 downto 0);
 begin
 	A_ext<="00000000"&A;
 	B_ext<="00000000"&B;
-	S <= result(7 downto 0) ;
+	mux_out <= A * B;  --padding because A ext * b ext creates pb
+ 	S <= result(7 downto 0) ;
 	result <= A_ext + B_ext when Ctrl_ALU = "001" else
-				 A_ext * B_ext when Ctrl_ALU = "010" else
-				 A_ext - B_ext when Ctrl_ALU = "011" ;
+				 mux_out when Ctrl_ALU = "010" else
+				 A_ext - B_ext when Ctrl_ALU = "011" else 
+				 x"0000" ;
 	C <= '1' when result > x"00FF" and Ctrl_ALU = "001" else '0';
 	O <= '1' when result > x"00FF" and Ctrl_ALU = "001" else '1' when result > x"FF" and Ctrl_ALU = "010" else '0' ;
 	Z <= '1' when result = x"0000" else '0';
