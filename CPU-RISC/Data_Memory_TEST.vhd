@@ -43,7 +43,7 @@ ARCHITECTURE behavior OF Data_Memory_TEST IS
     PORT(
          adr : IN  std_logic_vector(7 downto 0);
          IN_port : IN  std_logic_vector(7 downto 0);
-         OUT_port : OUT  std_logic_vector(31 downto 0);
+         OUT_port : OUT  std_logic_vector(7 downto 0);
          RW : IN  std_logic;
          RST : IN  std_logic;
          CLK : IN  std_logic
@@ -59,7 +59,7 @@ ARCHITECTURE behavior OF Data_Memory_TEST IS
    signal CLK : std_logic := '0';
 
  	--Outputs
-   signal OUT_port : std_logic_vector(31 downto 0);
+   signal OUT_port : std_logic_vector(7 downto 0);
 
    -- Clock period definitions
    constant CLK_period : time := 10 ns;

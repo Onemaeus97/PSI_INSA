@@ -39,12 +39,13 @@ end Instr_Memory;
 
 architecture Behavioral of Instr_Memory is
 type banc_instr is array(0 to 255) of STD_LOGIC_VECTOR(31 downto 0);
-signal instructions : banc_instr;
+constant instructions : banc_instr := (X"06010200" , X"06020100" ,X"06020300" ,X"06020400" ,X"05020100", others => X"00000000");
 begin
 P : process
 	begin 
 		wait until CLK'event and CLK='1';
 			OUT_port <= instructions(conv_integer(adr));
+			--adr <= adr + 1;
 	end process P;
 end Behavioral;
 

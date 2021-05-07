@@ -37,8 +37,8 @@ entity Processeur is
            RST_Proc : in  STD_LOGIC;
 			  QA: out STD_LOGIC_VECTOR (7 downto 0);
 			  QB: out STD_LOGIC_VECTOR (7 downto 0);
-			  sortie : out  STD_LOGIC
-			  
+			  --sortie : out  STD_LOGIC ;
+			  Test_ip : in  STD_LOGIC_VECTOR (7 downto 0)
 			  );
 end Processeur;
 
@@ -114,7 +114,10 @@ architecture Behavioral of processeur is
 	signal DI_EX_LC_EX_MEM: STD_LOGIC_VECTOR(2 DOWNTO 0);
 	signal MEM_RE_LC_OUT: std_logic;
 	
-		--MemoireInstruction
+	--MUX
+	signal LI_DI_MUX_DI_EX: STD_LOGIC_VECTOR(7 DOWNTO 0);
+	
+	--MemoireInstruction
 	signal INPUT_ADDR : STD_LOGIC_VECTOR (7 downto 0):=x"00";
 	signal INSTR : STD_LOGIC_VECTOR(31 DOWNTO 0);
 	
@@ -137,7 +140,7 @@ architecture Behavioral of processeur is
 begin
 	QA<= REG_QA;
 	QB<= REG_QB;
-	
+	INPUT_ADDR <= Test_ip ; 
 	
 	IM : Instr_Memory PORT MAP (
 		adr => INPUT_ADDR,
@@ -195,8 +198,8 @@ begin
 	);
 	
 	BdR : Register_bank PORT MAP (
-			A_adr => open,
-			B_adr => open,		
+			A_adr => LI_DI_DI_EX.B(3 downto 0),
+			B_adr => LI_DI_DI_EX.C(3 downto 0),		
 			W_adr => MEM_RE_OUT.A(3 downto 0),
 			W => MEM_RE_LC_OUT,
 			DATA => MEM_RE_OUT.B,
@@ -227,6 +230,18 @@ begin
 	
 	);
 	
-
+	
+	--LC
+	--DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
+	--ecriture dans memD
+	--EX_MEM_LC_MEM_RE <= '1' when EX_MEM_MEM_RE.OP = x"08" else '0';
+	--ecriture ds bdr
+	MEM_RE_LC_OUT  <= '1' when MEM_RE_OUT.OP = x"06" or  
+	MEM_RE_OUT.OP = x"05"or MEM_RE_OUT.OP = x"07"or 
+	MEM_RE_OUT.OP=x"01" or MEM_RE_OUT.OP=x"02" or MEM_RE_OUT.OP=x"03" else '0';
+	
+	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.op = x"06" else LI_DI_DI_EX.A when  LI_DI_DI_EX.op = x"05";
+	
+	
 end Behavioral;
 

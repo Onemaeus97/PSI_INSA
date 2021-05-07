@@ -34,14 +34,14 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity Data_Memory is
     Port ( adr : in  STD_LOGIC_VECTOR (7 downto 0);
            IN_port : in  STD_LOGIC_VECTOR (7 downto 0);
-			  OUT_port : out  STD_LOGIC_VECTOR(31 downto 0);
+			  OUT_port : out  STD_LOGIC_VECTOR(7 downto 0);
            RW : in  STD_LOGIC;
            RST : in  STD_LOGIC;
            CLK : in  STD_LOGIC);
 end Data_Memory;
 
 architecture Behavioral of Data_Memory is
-type banc_mem is array(0 to 255) of STD_LOGIC_VECTOR(31 downto 0);
+type banc_mem is array(0 to 255) of STD_LOGIC_VECTOR(7 downto 0);
 signal mem : banc_mem; 
 begin
 
@@ -54,7 +54,7 @@ P : process
 	 
 		if RST='0'
 		then
-			mem <= (others =>x"00000000");
+			mem <= (others =>x"00");
 		end if;
 		if RW='1'
 		then
