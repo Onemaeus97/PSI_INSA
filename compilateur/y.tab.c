@@ -1516,7 +1516,7 @@ yyreduce:
 #line 114 "yacc.y"
     {
         printf("plus \n");
-        add_instruction("ADD",Tmp-1,Tmp,Tmp-1); //add and put the result in the top of the tmp
+        add_instruction("ADD",Tmp+1,Tmp,Tmp+1); //add and put the result in the top of the tmp
         popTmp() ;
         }
     break;
@@ -1525,7 +1525,7 @@ yyreduce:
 #line 120 "yacc.y"
     {
         printf("moins \n");
-        add_instruction("SOU",Tmp-1,Tmp-1,Tmp);
+        add_instruction("SOU",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     break;
@@ -1534,7 +1534,7 @@ yyreduce:
 #line 126 "yacc.y"
     {
         printf("fois \n");
-        add_instruction("MUL",Tmp-1,Tmp-1,Tmp);
+        add_instruction("MUL",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     break;
@@ -1543,7 +1543,7 @@ yyreduce:
 #line 132 "yacc.y"
     {
         printf("diviser \n");
-        add_instruction("DIV",Tmp-1,Tmp-1,Tmp);
+        add_instruction("DIV",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     break;
@@ -1616,7 +1616,7 @@ yyreduce:
 #line 199 "yacc.y"
     {
                 printf("tINF \n");
-                add_instruction("INF",Tmp-1, Tmp-1, Tmp);
+                add_instruction("INF",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -1629,7 +1629,7 @@ yyreduce:
 #line 209 "yacc.y"
     {
                 printf("tSUP \n");
-                add_instruction("SUP",Tmp-1, Tmp-1, Tmp);
+                add_instruction("SUP",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -1642,7 +1642,7 @@ yyreduce:
 #line 219 "yacc.y"
     {
                 printf("tCMP \n");
-                add_instruction("CMP",Tmp-1, Tmp-1, Tmp);
+                add_instruction("CMP",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -1655,9 +1655,9 @@ yyreduce:
 #line 229 "yacc.y"
     {
                 printf("tINFEGLE \n");
-                add_instruction("INF",Tmp+1, Tmp-1, Tmp);
-                add_instruction("CMP",Tmp, Tmp-1, Tmp);
-                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                add_instruction("INF",Tmp-1, Tmp+1, Tmp);
+                add_instruction("CMP",Tmp, Tmp+1, Tmp);
+                add_instruction("ADD",Tmp+1, Tmp-1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -1670,9 +1670,9 @@ yyreduce:
 #line 241 "yacc.y"
     {
                 printf("tSUPEGALE \n");
-                add_instruction("SUP",Tmp+1, Tmp-1, Tmp);
-                add_instruction("CMP",Tmp, Tmp-1, Tmp);
-                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                add_instruction("SUP",Tmp-1, Tmp+1, Tmp);
+                add_instruction("CMP",Tmp, Tmp+1, Tmp);
+                add_instruction("ADD",Tmp+1, Tmp-1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -1685,9 +1685,9 @@ yyreduce:
 #line 253 "yacc.y"
     {
                 printf("tNOTEQUAL \n");
-                add_instruction("CMP", Tmp-1, Tmp-1, Tmp);
+                add_instruction("CMP", Tmp+1, Tmp+1, Tmp);
                 add_instruction("AFC", Tmp, 0, -1);
-                add_instruction("CMP", Tmp-1, Tmp-1,Tmp);
+                add_instruction("CMP", Tmp+1, Tmp+1,Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out

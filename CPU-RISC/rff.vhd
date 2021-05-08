@@ -37,7 +37,7 @@ use IEEE.std_logic_arith.ALL;
 ENTITY rff IS
 END rff;
  
-ARCHITECTURE behavior OF rff IS 
+                                        ARCHITECTURE behavior OF rff IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
@@ -93,10 +93,10 @@ BEGIN
    -- Stimulus process
    stim_proc: process
    begin		
-      
+
       wait for 100 ns;	
 		RST_Proc <= '1' after 20 ns ;
-		Test_ip<= x"01" , x"02" after 100 ns , x"03" after 200 ns , x"04" after 300 ns;
+		Test_ip<= x"01" , x"02" after 100 ns , x"03" after 200 ns , x"04" after 300 ns , x"05" after 400 ns;
       
 
       wait;

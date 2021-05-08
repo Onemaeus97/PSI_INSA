@@ -113,25 +113,25 @@ Calcul : tPARENTHESE_OUVRANTE Calcul tPARENTHESE_FERMANTE
     |Calcul tPLUS Calcul
         {
         printf("plus \n");
-        add_instruction("ADD",Tmp-1,Tmp,Tmp-1); //add and put the result in the top of the tmp
+        add_instruction("ADD",Tmp+1,Tmp,Tmp+1); //add and put the result in the top of the tmp
         popTmp() ;
         }
     |Calcul tMOINS Calcul
         {
         printf("moins \n");
-        add_instruction("SOU",Tmp-1,Tmp-1,Tmp);
+        add_instruction("SOU",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     |Calcul tFOIS Calcul
         {
         printf("fois \n");
-        add_instruction("MUL",Tmp-1,Tmp-1,Tmp);
+        add_instruction("MUL",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     |Calcul tDIVISER Calcul
         {
         printf("diviser \n");
-        add_instruction("DIV",Tmp-1,Tmp-1,Tmp);
+        add_instruction("DIV",Tmp+1,Tmp+1,Tmp);
         popTmp() ;
         }
     |EntierOuVar
@@ -198,7 +198,7 @@ Def_VAR_CONST_INT : Var
 Condition : Calcul tINF Calcul
             {
                 printf("tINF \n");
-                add_instruction("INF",Tmp-1, Tmp-1, Tmp);
+                add_instruction("INF",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -208,7 +208,7 @@ Condition : Calcul tINF Calcul
             |Calcul tSUP Calcul
             {
                 printf("tSUP \n");
-                add_instruction("SUP",Tmp-1, Tmp-1, Tmp);
+                add_instruction("SUP",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -218,7 +218,7 @@ Condition : Calcul tINF Calcul
             |Calcul tCMP Calcul
             {
                 printf("tCMP \n");
-                add_instruction("CMP",Tmp-1, Tmp-1, Tmp);
+                add_instruction("CMP",Tmp+1, Tmp+1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -228,9 +228,9 @@ Condition : Calcul tINF Calcul
             |Calcul tINFEGALE Calcul
             {
                 printf("tINFEGLE \n");
-                add_instruction("INF",Tmp+1, Tmp-1, Tmp);
-                add_instruction("CMP",Tmp, Tmp-1, Tmp);
-                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                add_instruction("INF",Tmp-1, Tmp+1, Tmp);
+                add_instruction("CMP",Tmp, Tmp+1, Tmp);
+                add_instruction("ADD",Tmp+1, Tmp-1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -240,9 +240,9 @@ Condition : Calcul tINF Calcul
             |Calcul tSUPEGALE Calcul
             {
                 printf("tSUPEGALE \n");
-                add_instruction("SUP",Tmp+1, Tmp-1, Tmp);
-                add_instruction("CMP",Tmp, Tmp-1, Tmp);
-                add_instruction("ADD",Tmp-1, Tmp+1, Tmp);
+                add_instruction("SUP",Tmp-1, Tmp+1, Tmp);
+                add_instruction("CMP",Tmp, Tmp+1, Tmp);
+                add_instruction("ADD",Tmp+1, Tmp-1, Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out
@@ -252,9 +252,9 @@ Condition : Calcul tINF Calcul
             |Calcul tNOTEGALE Calcul
             {
                 printf("tNOTEQUAL \n");
-                add_instruction("CMP", Tmp-1, Tmp-1, Tmp);
+                add_instruction("CMP", Tmp+1, Tmp+1, Tmp);
                 add_instruction("AFC", Tmp, 0, -1);
-                add_instruction("CMP", Tmp-1, Tmp-1,Tmp);
+                add_instruction("CMP", Tmp+1, Tmp+1,Tmp);
                 popTmp();
                 index_label ++ ;
                 label[index_label] = get_line_asm(); //label comme une sorte de pile - last in first out

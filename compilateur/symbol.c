@@ -4,7 +4,7 @@
 //initialise symbol table
 symbol *symbolTable[TAILLE] ;
 int position = -1;
-int Tmp = 200;
+int Tmp = 256;
 symbol *New_Symbol(char *name, bool isConstant, bool isInitialised, enum types type)
 {
     if (position != -1) //if symbolTable is not empty
@@ -45,7 +45,7 @@ int pushSymbol(char *name, bool isConstant, bool isInitialised, enum types type)
 }
 int pushTmp()
 {
-    Tmp++;
+    Tmp--;
     //printf("TMP : %d \n",Tmp);
     return Tmp;
 }
@@ -53,7 +53,7 @@ int pushTmp()
 int popTmp()
 {
     int ret = Tmp ;
-    Tmp -- ;
+    Tmp ++ ;
     //printf("TMP : %d \n",Tmp);
     return ret;
 }

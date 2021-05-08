@@ -164,7 +164,7 @@ begin
 	DI_EX :  Pipeline PORT MAP (
 			CLK => CLK_PROC,
 			inA => LI_DI_DI_EX.A,
-			inB => LI_DI_DI_EX.B,
+			inB => LI_DI_MUX_DI_EX,
 			inC => LI_DI_DI_EX.C,
 			inOP => LI_DI_DI_EX.OP,
 			outOP => DI_EX_EX_MEM.OP,
@@ -205,8 +205,8 @@ begin
 			DATA => MEM_RE_OUT.B,
 			RST => RST_PROC,
 			CLK=> CLK_PROC,
-			QA =>open,
-			QB => open
+			QA =>REG_QA,
+			QB => REG_QB
 	);	
 	
 	ALU_Map : ALU PORT MAP (
@@ -240,7 +240,7 @@ begin
 	MEM_RE_OUT.OP = x"05"or MEM_RE_OUT.OP = x"07"or 
 	MEM_RE_OUT.OP=x"01" or MEM_RE_OUT.OP=x"02" or MEM_RE_OUT.OP=x"03" else '0';
 	
-	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.op = x"06" else LI_DI_DI_EX.A when  LI_DI_DI_EX.op = x"05";
+	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.op = x"06" else REG_QA when  LI_DI_DI_EX.op = x"05";
 	
 	
 end Behavioral;
