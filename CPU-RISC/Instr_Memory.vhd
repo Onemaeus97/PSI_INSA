@@ -39,7 +39,7 @@ end Instr_Memory;
 
 architecture Behavioral of Instr_Memory is
 type banc_instr is array(0 to 255) of STD_LOGIC_VECTOR(31 downto 0);
-constant instructions : banc_instr := (X"06010100" , X"06010200" ,X"06020100" ,X"06020500" ,X"05010200", others => X"00000000");
+constant instructions : banc_instr := (X"06010100" , X"06020200" ,X"06030300" ,X"06040400" ,X"03010304", others => X"00000000");
 begin
 P : process
 	begin 

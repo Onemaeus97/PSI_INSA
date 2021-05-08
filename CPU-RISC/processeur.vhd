@@ -116,7 +116,7 @@ architecture Behavioral of processeur is
 	
 	--MUX
 	signal LI_DI_MUX_DI_EX: STD_LOGIC_VECTOR(7 DOWNTO 0);
-	
+	signal DI_EX_MUX_EX_MEM: STD_LOGIC_VECTOR(7 DOWNTO 0);
 	--MemoireInstruction
 	signal INPUT_ADDR : STD_LOGIC_VECTOR (7 downto 0):=x"00";
 	signal INSTR : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -153,7 +153,6 @@ begin
 			inA => INSTR(23 downto 16),
 			inB => INSTR(15 downto 8),
 			inC => INSTR(7 downto 0),
-			--inC => open,
 			inOP => INSTR(31 downto 24),
 			outOP => LI_DI_DI_EX.OP,
 			outA => LI_DI_DI_EX.A,
@@ -165,7 +164,7 @@ begin
 			CLK => CLK_PROC,
 			inA => LI_DI_DI_EX.A,
 			inB => LI_DI_MUX_DI_EX,
-			inC => LI_DI_DI_EX.C,
+			inC => REG_QB,
 			inOP => LI_DI_DI_EX.OP,
 			outOP => DI_EX_EX_MEM.OP,
 			outA => DI_EX_EX_MEM.A,
@@ -176,7 +175,8 @@ begin
 	EX_Mem :  Pipeline PORT MAP (
 			CLK => CLK_PROC,
 			inA => DI_EX_EX_MEM.A,
-			inB => DI_EX_EX_MEM.B,
+			inB => DI_EX_MUX_EX_MEM,
+			--bien peut etre vide
 			inC => DI_EX_EX_MEM.C,
 			inOP => DI_EX_EX_MEM.OP,
 			outOP => EX_MEM_MEM_RE.OP,
@@ -210,14 +210,14 @@ begin
 	);	
 	
 	ALU_Map : ALU PORT MAP (
-			A => open,
-			B => open,
-			N => open,
-			O => open,
-			Z => open,
-			C => open,
-			S => open,
-			CTRL_ALU => open
+			A => DI_EX_EX_MEM.B,
+			B => DI_EX_EX_MEM.C,
+			N => ALU_N,
+			O => ALU_O,
+			Z => ALU_Z,
+			C => ALU_C,
+			S => ALU_S,
+			CTRL_ALU => DI_EX_LC_EX_MEM
 	);	
 	
 	MemD : Data_Memory PORT MAP (
@@ -232,7 +232,7 @@ begin
 	
 	
 	--LC
-	--DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
+	DI_EX_LC_EX_MEM <= DI_EX_EX_MEM.OP(2 DOWNTO 0);
 	--ecriture dans memD
 	--EX_MEM_LC_MEM_RE <= '1' when EX_MEM_MEM_RE.OP = x"08" else '0';
 	--ecriture ds bdr
@@ -240,8 +240,10 @@ begin
 	MEM_RE_OUT.OP = x"05"or MEM_RE_OUT.OP = x"07"or 
 	MEM_RE_OUT.OP=x"01" or MEM_RE_OUT.OP=x"02" or MEM_RE_OUT.OP=x"03" else '0';
 	
-	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.op = x"06" else REG_QA when  LI_DI_DI_EX.op = x"05";
-	
+	--Mux
+	--LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.op = x"06" else REG_QA when  LI_DI_DI_EX.op = x"05";
+	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.OP = x"06" or LI_DI_DI_EX.OP = x"07" else REG_QA;
+	DI_EX_MUX_EX_MEM <= ALU_S when DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" else DI_EX_EX_MEM.B;
 	
 end Behavioral;
 

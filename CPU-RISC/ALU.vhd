@@ -50,10 +50,10 @@ architecture Behavioral of ALU is
 begin
 	A_ext<="00000000"&A;
 	B_ext<="00000000"&B;
-	mux_out <= A * B;  --padding because A ext * b ext creates pb
+	--mux_out <= A * B;  --padding because A ext * b ext creates pb
  	S <= result(7 downto 0) ;
 	result <= A_ext + B_ext when Ctrl_ALU = "001" else
-				 mux_out when Ctrl_ALU = "010" else
+				 A * B when Ctrl_ALU = "010" else
 				 A_ext - B_ext when Ctrl_ALU = "011" else 
 				 x"0000" ;
 	C <= '1' when result > x"00FF" and Ctrl_ALU = "001" else '0';

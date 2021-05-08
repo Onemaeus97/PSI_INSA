@@ -88,8 +88,8 @@ BEGIN
    stim_proc: process
    begin		
      
-		A <= "10000000";
-		B <= "10000000";
+		A <= "00000111";
+		B <= "00001011";
 		Ctrl_Alu <= "001" , "011" after 100 ns , "010" after 200 ns;
       
 
