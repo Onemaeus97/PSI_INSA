@@ -96,7 +96,7 @@ BEGIN
 
       wait for 100 ns;	
 		RST_Proc <= '1' after 20 ns ;
-		Test_ip<= x"01" after 200 ns , x"02" after 300 ns , x"03" after 400 ns , x"04" after 500 ns , x"05" after 600 ns;
+		Test_ip<= x"01" after 200 ns , x"02" after 300 ns , x"03" after 400 ns , x"04" after 500 ns , x"05" after 600 ns , x"06" after 700 ns ;
       
 
       wait;
