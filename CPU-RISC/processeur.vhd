@@ -154,11 +154,15 @@ begin
 	--use to do the test
 	INPUT_ADDR <= Test_ip ; 
 	
+	
+	
+	
 	IM : Instr_Memory PORT MAP (
 		adr => INPUT_ADDR,
 		CLK => CLK_PROC,
 		OUT_port => INSTR
 	);
+	
 	
 	LI_DI :  Pipeline PORT MAP (
 			CLK => CLK_PROC,
@@ -242,6 +246,15 @@ begin
 		CLK => CLK_PROC
 	
 	);
+	
+	Gest_Alea: process
+   begin		
+      wait until CLK_Proc'event and CLK_Proc ='1';
+			if LI_DI_DI_EX.OP = x"06" and INSTR(31 downto 24) = x"05" and LI_DI_DI_EX.A = INSTR(15 downto 8)
+			then 
+			end if;
+   end process Gest_Alea;
+	
 	
 
 end Behavioral;

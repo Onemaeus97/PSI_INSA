@@ -94,12 +94,14 @@ BEGIN
    stim_proc: process
    begin		
 
-      wait for 100 ns;	
-		RST_Proc <= '1' after 20 ns ;
-		Test_ip<= x"01" after 200 ns , x"02" after 300 ns , x"03" after 400 ns , x"04" after 500 ns , x"05" after 600 ns , x"06" after 700 ns ;
-      
+      --wait for 100 ns;	
+	   RST_Proc <= '1' after 10 ns ;
+		--Test_ip<= x"01" after 30 ns , x"02" after 40 ns , x"03" after 50 ns , x"04" after 60 ns ;
+      wait until CLK_Proc'event and CLK_Proc ='1';
+			Test_ip <= Test_ip +1 ;
+   end process stim_proc;
+	
+	
 
-      wait;
-   end process;
 
 END;
