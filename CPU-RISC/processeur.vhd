@@ -142,7 +142,6 @@ begin
 	--MUX 
 	LI_DI_MUX_DI_EX <= LI_DI_DI_EX.B when LI_DI_DI_EX.OP = x"06" or LI_DI_DI_EX.OP = x"07" else REG_QA;
 	DI_EX_MUX_EX_MEM <= ALU_S when DI_EX_EX_MEM.OP = x"01" or DI_EX_EX_MEM.OP = x"02" or DI_EX_EX_MEM.OP = x"03" else DI_EX_EX_MEM.B;
-	--Store
 	EX_MEM_MUX_MemD_IN <= EX_MEM_MEM_RE.A when EX_MEM_MEM_RE.OP = x"08" else EX_MEM_MEM_RE.B;
 	MemD_OUT_MUX_MEM_RE <= MemD_OUT when EX_MEM_MEM_RE.OP = x"07" else EX_MEM_MEM_RE.B;
 	--LC
