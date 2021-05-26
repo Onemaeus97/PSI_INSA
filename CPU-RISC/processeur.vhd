@@ -246,13 +246,13 @@ begin
 	
 	);
 	
-	Gest_Alea: process
-   begin		
-      wait until CLK_Proc'event and CLK_Proc ='1';
-			if LI_DI_DI_EX.OP = x"06" and INSTR(31 downto 24) = x"05" and LI_DI_DI_EX.A = INSTR(15 downto 8)
-			then 
-			end if;
-   end process Gest_Alea;
+--Gest_Alea: process
+  -- begin		
+     -- wait until CLK_Proc'event and CLK_Proc ='1';
+		--	if LI_DI_DI_EX.OP = x"06" and INSTR(31 downto 24) = x"05" and LI_DI_DI_EX.A = INSTR(15 downto 8)
+		--	then 
+		--	end if;
+   --end process Gest_Alea;
 	
 	
 
